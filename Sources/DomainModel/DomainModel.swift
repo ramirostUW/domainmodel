@@ -9,6 +9,42 @@ struct DomainModel {
 // Money
 //
 public struct Money {
+    var amount: Int;
+    var currency: String;
+    
+    func convert(_ targetCurrency: String)-> Money{
+        var amntUSD = amount;
+        if(currency == "GBP"){
+            amntUSD = Int((Double(amntUSD)*2.0).rounded());
+        }
+        if(currency == "CAN"){
+            amntUSD = Int((Double(amntUSD)/1.25).rounded());
+        }
+        if(currency == "EUR"){
+            amntUSD = Int((Double(amntUSD)/1.5).rounded());
+        }
+        
+        if(targetCurrency == "GBP"){
+            return Money(amount: Int((Double(amntUSD)/2.0).rounded()), currency: targetCurrency)
+        }
+        else if (targetCurrency == "EUR"){
+            return Money(amount: Int((Double(amntUSD)*1.5).rounded()), currency: targetCurrency)
+        }
+        else if (targetCurrency == "CAN"){
+            return Money(amount: Int((Double(amntUSD)*1.25).rounded()), currency: targetCurrency)
+        }
+        else {
+            return Money(amount: amntUSD, currency: targetCurrency);
+        }
+    }
+    
+    func add (_ secondCurrency: Money) -> Money{
+        var convertedSecondCurrency = secondCurrency;
+        if(convertedSecondCurrency.currency != currency){
+            convertedSecondCurrency = secondCurrency.convert(currency)
+        }
+        return Money(amount: (amount + convertedSecondCurrency.amount), currency: currency)
+    }
 }
 
 ////////////////////////////////////
