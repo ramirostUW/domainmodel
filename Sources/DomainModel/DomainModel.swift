@@ -55,6 +55,51 @@ public class Job {
         case Hourly(Double)
         case Salary(UInt)
     }
+    
+    var title: String;
+    var type: JobType;
+    
+    init (title inputTitle: String, type inputType: JobType){
+        title = inputTitle;
+        type = inputType;
+    }
+    
+    func calculateIncome(_ hoursWorked: Int) -> Int{
+        switch type {
+        case .Hourly(let hourlyWage):
+            return Int((hourlyWage*Double(hoursWorked)).rounded());
+        case .Salary(let salaryWage):
+            return Int(salaryWage);
+        }
+    }
+    
+    func raise(byAmount: Int){
+        switch type {
+        case .Hourly(let hourlyWage):
+            type = JobType.Hourly(hourlyWage + Double(byAmount));
+        case .Salary(let salaryWage):
+            type = JobType.Salary(salaryWage + UInt(byAmount));
+        }
+    }
+    
+    func raise(byAmount: Double){
+        switch type {
+        case .Hourly(let hourlyWage):
+            type = JobType.Hourly(hourlyWage + byAmount);
+        case .Salary(let salaryWage):
+            type = JobType.Salary(salaryWage + UInt(byAmount));
+        }
+    }
+    
+    func raise(byPercent: Double){
+        switch type {
+        case .Hourly(let hourlyWage):
+            type = JobType.Hourly(hourlyWage * (1.0 + byPercent));
+        case .Salary(let salaryWage):
+            type = JobType.Salary(UInt((Double(salaryWage) * (1.0 + byPercent)).rounded()));
+        }
+    }
+
 }
 
 ////////////////////////////////////
