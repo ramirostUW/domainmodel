@@ -39,11 +39,11 @@ public struct Money {
     }
     
     func add (_ secondCurrency: Money) -> Money{
-        var convertedSecondCurrency = secondCurrency;
-        if(convertedSecondCurrency.currency != currency){
-            convertedSecondCurrency = secondCurrency.convert(currency)
+        var convertedCurrency = self;
+        if(convertedCurrency.currency != secondCurrency.currency){
+            convertedCurrency = convertedCurrency.convert(secondCurrency.currency)
         }
-        return Money(amount: (amount + convertedSecondCurrency.amount), currency: currency)
+        return Money(amount: (secondCurrency.amount + convertedCurrency.amount), currency: secondCurrency.currency)
     }
 }
 
@@ -106,10 +106,71 @@ public class Job {
 // Person
 //
 public class Person {
+    var firstName: String;
+    var lastName: String;
+    var age: Int;
+    private var myJob: Job?
+    var job: Job?{
+        get { return myJob }
+        set {
+            if(age >= 18){
+                myJob = newValue;
+            }
+        }
+    };
+    private var mySpouse: Person?
+    var spouse: Person? {
+        get { return mySpouse }
+        set {
+            if(age >= 18){
+                mySpouse = newValue;
+            }
+        }
+    };
+    
+    init (firstName inputFirst: String, lastName inputLast: String,
+          age inputAge: Int) {
+        firstName = inputFirst;
+        lastName = inputLast;
+        age = inputAge;
+    }
+    
+    func toString() -> String{
+        let firstNameComp = "firstName:" + firstName + " "
+        let lastNameComp = "lastName:" + lastName + " "
+        let ageComp = "age:" + String(age) + " "
+        var jobComp = "job:nil "
+        if(job != nil){
+            jobComp = "job:" + (job!.title) + " "
+        }
+        var spouseComp = "spouse:nil"
+        if(spouse != nil){
+            spouseComp = "spouse:" + spouse!.firstName
+        }
+        return "[Person: " + firstNameComp + lastNameComp + ageComp + jobComp + spouseComp + "]"
+    }
 }
 
 ////////////////////////////////////
 // Family
 //
 public class Family {
+    var people: [Person]
+    init(spouse1: Person, spouse2: Person){
+        if(spouse1.spouse == nil && spouse2.spouse == nil){
+            people = [spouse1, spouse2]
+        }
+        else {
+            people = []
+        }
+    }
+    
+    
+    func haveChild(_ newChild: Person) -> Bool{
+        return false;
+    }
+    
+    func householdIncome() -> Int {
+        return 1;
+    }
 }
