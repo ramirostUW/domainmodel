@@ -155,22 +155,37 @@ public class Person {
 // Family
 //
 public class Family {
-    var people: [Person]
+    var members: [Person]
     init(spouse1: Person, spouse2: Person){
         if(spouse1.spouse == nil && spouse2.spouse == nil){
-            people = [spouse1, spouse2]
+            members = [spouse1, spouse2]
         }
         else {
-            people = []
+            members = []
         }
     }
     
     
     func haveChild(_ newChild: Person) -> Bool{
+        let spouses = [members[0], members[1]]
+        for parent in spouses{
+            if(parent.age >= 21){
+                members.append(newChild)
+                return true;
+            }
+        }
         return false;
     }
     
     func householdIncome() -> Int {
-        return 1;
+        
+        var returnVal = 0;
+        for person in members {
+            let currJob = person.job
+            if(currJob != nil){
+                returnVal = returnVal + currJob!.calculateIncome(2000)
+            }
+        }
+        return returnVal;
     }
 }
